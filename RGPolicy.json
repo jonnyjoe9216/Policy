@@ -1,57 +1,38 @@
 {
-  "properties": {
-    "displayName": "Allowed locations for specific resource groups-CD001",
-    "policyType": "Custom",
-    "mode": "Indexed",
-    "description": "This policy restricts the locations where resources in specific resource groups can be deployed.",
-    "metadata": {
-      "version": "1.0.0",
-      "category": "Location"
-    },
-    "parameters": {
-      "allowedResourceGroups": {
-        "type": "Array",
+    "properties": {
+        "displayName": "Allowed locations for resources - CA001",
+        "policyType": "Custom",
+        "mode": "Indexed",
+        "description": "This policy restricts resource creation to specific locations, based on a predefined list.",
         "metadata": {
-          "description": "The list of resource groups to apply location restrictions.",
-          "displayName": "Allowed Resource Groups"
+            "version": "1.0.0",
+            "category": "General"
         },
-        "defaultValue": [
-          "TestRG",
-          "demogroup1"
-        ]
-      },
-      "allowedLocations": {
-        "type": "Array",
-        "metadata": {
-          "description": "The list of allowed locations where resources can be deployed.",
-          "displayName": "Allowed locations"
+        "parameters": {
+            "allowedLocations": {
+                "type": "Array",
+                "metadata": {
+                    "description": "The list of allowed locations where resources can be deployed.",
+                    "displayName": "Allowed locations"
+                },
+                "allowedValues": [
+                    "East US",
+                    "West US",
+                    "Central US"
+                ],
+                "defaultValue": [
+                    "East US"
+                ]
+            }
         },
-        "allowedValues": [
-          "East US",
-          "West US",
-          "Central US"
-        ],
-        "defaultValue": [
-          "East US"
-        ]
-      }
-    },
-    "policyRule": {
-      "if": {
-        "allOf": [
-          {
-            "field": "resourceGroup().name",
-            "in": "[parameters('allowedResourceGroups')]"
-          },
-          {
-            "field": "location",
-            "notIn": "[parameters('allowedLocations')]"
-          }
-        ]
-      },
-      "then": {
-        "effect": "deny"
-      }
+        "policyRule": {
+            "if": {
+                "field": "location",
+                "notIn": "[parameters('allowedLocations')]"
+            },
+            "then": {
+                "effect": "deny"
+            }
+        }
     }
-  }
 }
